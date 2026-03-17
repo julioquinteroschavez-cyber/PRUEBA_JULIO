@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CRECER IFD - Sistema SST</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Segoe UI', Arial, sans-serif;
+    background: linear-gradient(135deg, #003d1a 0%, #007534 55%, #F89A1C 100%);
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+  }
+
+  body::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(ellipse at center, rgba(255,255,255,0.03) 0%, transparent 60%);
+    animation: pulse 8s ease-in-out infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { transform: scale(1); opacity: 0.5; }
+    50% { transform: scale(1.1); opacity: 1; }
+  }
+
+  .particles {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+  }
+
+  .particle {
+    position: absolute;
+    width: 4px;
+    height: 4px;
+    background: rgba(255,255,255,0.15);
+    border-radius: 50%;
+    animation: float linear infinite;
+  }
+
+  @keyframes float {
+    0% { transform: translateY(100vh) rotate(0deg); opacity: 0; }
+    10% { opacity: 1; }
+    90% { opacity: 1; }
+    100% { transform: translateY(-100px) rotate(720deg); opacity: 0; }
+  }
+
+  .login-wrapper {
+    position: relative;
+    z-index: 10;
+    width: 100%;
+    max-width: 440px;
+    padding: 20px;
+  }
+
+  .login-card {
+    background: rgba(255,255,255,0.96);
+    border-radius: 20px;
+    padding: 48px 40px;
+    box-shadow: 0 25px 60px rgba(0,0,0,0.4), 0 0 0 1px rgba(255,255,255,0.1);
+    backdrop-filter: blur(10px);
+  }
+
+  .brand-header {
+    text-align: center;
+    margin-bottom: 36px;
+  }
+
+  .brand-logo {
+    width: 80px;
+    height: 80px;
+    background: linear-gradient(135deg, #004d22, #007534);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 16px;
+    box-shadow: 0 8px 20px rgba(0,77,34,0.35);
+  }
+
+  .brand-logo svg {
+    width: 44px;
+    height: 44px;
+    fill: white;
+  }
+
+  .brand-name {
+    font-size: 26px;
+    font-weight: 800;
+    color: #004d22;
+    letter-spacing: 2px;
+    margin-bottom: 4px;
+  }
+
+  .brand-sub {
+    font-size: 11px;
+    color: #5a7a5a;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    font-weight: 600;
+  }
+
+  .divider {
+    height: 2px;
+    background: linear-gradient(90deg, transparent, #007534, #F89A1C, transparent);
+    margin: 24px 0;
+    border-radius: 2px;
+  }
+
+  .system-title {
+    text-align: center;
+    margin-bottom: 32px;
+  }
+
+  .system-title h2 {
+    font-size: 13px;
+    font-weight: 700;
+    color: #004d22;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    line-height: 1.5;
+  }
+
+  .form-group {
+    margin-bottom: 20px;
+  }
+
+  .form-group label {
+    display: block;
+    font-size: 12px;
+    font-weight: 700;
+    color: #3a6a3a;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    margin-bottom: 8px;
+  }
+
+  .input-wrap {
+    position: relative;
+  }
+
+  .input-wrap svg {
+    position: absolute;
+    left: 14px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 18px;
+    height: 18px;
+    fill: #7aaa7a;
+    pointer-events: none;
+  }
+
+  .form-group input {
+    width: 100%;
+    padding: 13px 14px 13px 44px;
+    border: 2px solid #c8e8d4;
+    border-radius: 10px;
+    font-size: 15px;
+    color: #1a3d1a;
+    background: #f5faf6;
+    transition: all 0.3s;
+    outline: none;
+  }
+
+  .form-group input:focus {
+    border-color: #007534;
+    background: white;
+    box-shadow: 0 0 0 4px rgba(0,117,52,0.12);
+  }
+
+  .toggle-pass {
+    position: absolute;
+    right: 14px;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+    background: none;
+    border: none;
+    padding: 2px;
+    color: #7aaa7a;
+    transition: color 0.2s;
+  }
+
+  .toggle-pass:hover { color: #007534; }
+
+  .login-btn {
+    width: 100%;
+    padding: 14px;
+    background: linear-gradient(135deg, #004d22, #007534);
+    color: white;
+    border: none;
+    border-radius: 10px;
+    font-size: 15px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all 0.3s;
+    margin-top: 8px;
+    box-shadow: 0 4px 15px rgba(0,77,34,0.35);
+  }
+
+  .login-btn:hover {
+    transform: translateY(-2px);
+    background: linear-gradient(135deg, #003d1a, #005f28);
+    box-shadow: 0 8px 25px rgba(0,77,34,0.45);
+  }
+
+  .login-btn:active { transform: translateY(0); }
+
+  .error-msg {
+    display: none;
+    background: #fff0f0;
+    border: 1px solid #ffcccc;
+    color: #cc3333;
+    padding: 10px 14px;
+    border-radius: 8px;
+    font-size: 13px;
+    margin-top: 14px;
+    text-align: center;
+  }
+
+  .footer-note {
+    text-align: center;
+    margin-top: 24px;
+    font-size: 11px;
+    color: #7a9a7a;
+  }
+</style>
+</head>
+<body>
+
+<div class="particles" id="particles"></div>
+
+<div class="login-wrapper">
+  <div class="login-card">
+    <div class="brand-header">
+      <div class="brand-logo">
+        <svg viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+      </div>
+      <div class="brand-name">CRECER IFD</div>
+      <div class="brand-sub">Institución Financiera de Desarrollo</div>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="system-title">
+      <h2>Sistema de Salud y<br>Seguridad en el Trabajo</h2>
+    </div>
+
+    <form id="loginForm" onsubmit="return handleLogin(event)">
+      <div class="form-group">
+        <label>Usuario</label>
+        <div class="input-wrap">
+          <svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+          <input type="text" id="username" placeholder="Ingrese su usuario" autocomplete="username" required>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>Contraseña</label>
+        <div class="input-wrap">
+          <svg viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+          <input type="password" id="password" placeholder="Ingrese su contraseña" autocomplete="current-password" required>
+          <button type="button" class="toggle-pass" onclick="togglePassword()">
+            <svg id="eyeIcon" viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2" fill="none"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+          </button>
+        </div>
+      </div>
+
+      <button type="submit" class="login-btn">Ingresar al Sistema</button>
+      <div class="error-msg" id="errorMsg">Usuario o contraseña incorrectos.</div>
+    </form>
+
+    <div style="margin-top:20px;background:#f0f7f3;border:1px solid #c8e8d4;border-radius:10px;padding:12px 16px;">
+      <div style="font-size:10px;font-weight:700;color:#3a6a3a;text-transform:uppercase;letter-spacing:0.8px;margin-bottom:8px;">Credenciales de acceso</div>
+      <table style="width:100%;font-size:12px;border-collapse:collapse;">
+        <thead>
+          <tr>
+            <th style="text-align:left;padding:3px 8px;color:#5a8a5a;font-weight:600;">Usuario</th>
+            <th style="text-align:left;padding:3px 8px;color:#5a8a5a;font-weight:600;">Contraseña</th>
+            <th style="text-align:left;padding:3px 8px;color:#5a8a5a;font-weight:600;">Rol</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td style="padding:3px 8px;font-weight:700;color:#004d22;">admin</td><td style="padding:3px 8px;font-family:monospace;color:#007534;">admin123</td><td style="padding:3px 8px;color:#5a7a5a;">Administrador</td></tr>
+          <tr><td style="padding:3px 8px;font-weight:700;color:#004d22;">sst</td><td style="padding:3px 8px;font-family:monospace;color:#007534;">sst123</td><td style="padding:3px 8px;color:#5a7a5a;">Responsable SST</td></tr>
+          <tr><td style="padding:3px 8px;font-weight:700;color:#004d22;">viewer</td><td style="padding:3px 8px;font-family:monospace;color:#007534;">viewer123</td><td style="padding:3px 8px;color:#5a7a5a;">Visualizador</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="footer-note" style="margin-top:12px;">CRECER IFD &copy; 2025 &mdash; Sistema SST v1.0</div>
+  </div>
+</div>
+
+<script>
+// Generar partículas
+const container = document.getElementById('particles');
+for (let i = 0; i < 25; i++) {
+  const p = document.createElement('div');
+  p.className = 'particle';
+  p.style.cssText = `left:${Math.random()*100}%;width:${2+Math.random()*5}px;height:${2+Math.random()*5}px;animation-duration:${8+Math.random()*15}s;animation-delay:${Math.random()*10}s`;
+  container.appendChild(p);
+}
+
+// Usuarios del sistema
+const USERS = [
+  { user: 'admin',  pass: 'admin123',  role: 'admin',  name: 'Administrador' },
+  { user: 'sst',    pass: 'sst123',    role: 'editor', name: 'Responsable SST' },
+  { user: 'viewer', pass: 'viewer123', role: 'viewer', name: 'Visualizador' }
+];
+
+function handleLogin(e) {
+  e.preventDefault();
+  const u = document.getElementById('username').value.trim().toLowerCase();
+  const p = document.getElementById('password').value.trim();
+  const found = USERS.find(x => x.user === u && x.pass === p);
+  if (found) {
+    localStorage.setItem('sst_auth', JSON.stringify({
+      user: found.user, role: found.role, name: found.name, time: Date.now()
+    }));
+    window.location.href = 'index.html';
+  } else {
+    document.getElementById('errorMsg').style.display = 'block';
+    document.getElementById('password').value = '';
+    document.getElementById('password').focus();
+  }
+  return false;
+}
+
+function togglePassword() {
+  const inp = document.getElementById('password');
+  inp.type = inp.type === 'password' ? 'text' : 'password';
+}
+</script>
+</body>
+</html>
